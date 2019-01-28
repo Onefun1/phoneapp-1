@@ -3,12 +3,11 @@ import Component from '../../component.js';
 export default class PhonesCart extends Component{
   constructor({
     element,
-    phonesToBuy,
     phoneService
   }) {
     super({ element });
 
-    this._phonesToBuy = phonesToBuy;
+    this._phonesToBuy = new Map();
     this._phoneService = phoneService;
 
     this.addToCart = this.addToCart.bind(this);
@@ -26,10 +25,7 @@ export default class PhonesCart extends Component{
 
       if (event.target.closest('[data-cart-del]')) {
         this._delFromCart(phoneElement);
-      } else {
-        return;
       }
-
 
     });
   }
@@ -52,25 +48,30 @@ export default class PhonesCart extends Component{
   _render() {
     this._element.innerHTML = `
       <ul class="phones-in-cart">
-        ${ Array.from(this._phonesToBuy).map(phone => `
+        ${ Array.from(this._phonesToBuy).map(phone => {
+          const phoneId = phone[0];
+          const phoneName = phone[1].name;
+          const phoneAmount = phone[1].amount;
+          return `
         
-          <li class="inCart" data-element="phone" data-phone-id="${ phone[0] }">
+          <li class="inCart" data-element="phone" data-phone-id="${ phoneId }">
+            <div class = "phones-in-cart__item">
             <span class="cart-thumb">
-              ${ phone[1].name }
+              ${ phoneId }:  
             </span>
             <span class="cart-amnt">
-              ${ phone[1].amount } 
+              ${ phoneAmount } 
             </span>
             <span data-cart-del class="phones__btn-buy-wrapper">
-              <a class="btn btn-danger">
+              <a class="">
                 Del
               </a>
             </span>
-
+            </div>
           </li>
         
         
-        `).join('') }
+        `;}).join('') }
       </ul>
     `;
   }

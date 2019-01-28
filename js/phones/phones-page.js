@@ -9,11 +9,8 @@ export default class PhonesPage {
 
     this._render();
 
-    this._addedToCart = new Map;
-
     this._cart = new PhonesCart({
       element: document.querySelector('[data-component="phones-cart"]'),
-      phonesToBuy: this._addedToCart,
       phoneService: PhoneService,
     });
 

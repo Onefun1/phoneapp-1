@@ -21,7 +21,7 @@ export default class PhoneCatalog extends Component {
       if (!phoneElement) {
         return;
       }
-      if (event.target.closest('.thumb') || event.target.matches('[data-phone-header]')) {
+      if (event.target.closest('[data-phone-thumb]') || event.target.matches('[data-phone-header]')) {
         this._onPhoneSelected(phoneElement.dataset.phoneId);
       } else if (event.target.closest('[data-cart-add]') ) {
         this._onBuy(phoneElement.dataset.phoneId);
@@ -35,7 +35,7 @@ export default class PhoneCatalog extends Component {
         ${ this._phones.map(phone => `
         
           <li class="thumbnail" data-element="phone" data-phone-id="${ phone.id }">
-            <a href="#!/phones/${ phone.id }" class="thumb">
+            <a href="#!/phones/${ phone.id }" class="thumb" data-phone-thumb>
               <img alt="${ phone.name }" src="${ phone.imageUrl }">
             </a>
   

@@ -30,8 +30,8 @@ export default class PhoneViewer extends Component{
     super.show();
     this._phoneDetails = phoneDetails;
     this._render();
-    this._btnBack = this._element.querySelector('[data-back]');
-    this._btnAddToCart = this._element.querySelector('[data-cart-add]');
+    this._btnBack = this._element.querySelector('[data-element="back"]');
+    this._btnAddToCart = this._element.querySelector('[data-element="add-to-cart"]');
     this._largeImg = this._element.querySelector('.phone');
   }
 
@@ -41,8 +41,8 @@ export default class PhoneViewer extends Component{
     this._element.innerHTML = `
       <img class="phone" src="${ phone.images[0] }">
 
-      <button data-back>Back</button>
-      <button data-cart-add>Add to cart</button>
+      <button data-element="back">Back</button>
+      <button data-element="add-to-cart">Add to cart</button>
   
   
       <h1>${ phone.name }</h1>
