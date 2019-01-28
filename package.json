@@ -1,0 +1,19 @@
+{
+  "name": "phoneapp",
+  "version": "0.1.0",
+  "description": "Mate PhoneApp",
+  "main": "index.html",
+  "scripts": {
+    "test": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samvimes01/phoneapp.git"
+  },
+  "author": "Oleksandr Korneiko",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/samvimes01/phoneapp/issues"
+  },
+  "homepage": "https://github.com/samvimes01/phoneapp#readme"
+}
