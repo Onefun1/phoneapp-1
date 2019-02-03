@@ -1,32 +1,32 @@
 import Component from '../../component.js';
 
 export default class PhoneCatalog extends Component {
-  constructor({
-    element,
-    phones = [],
-    onPhoneSelected = () => {},
-    onBuy = () => {}
-  }) {
+  constructor({ element }) {
     super({ element });
-    this._element = element;
-    this._phones = phones;
-    this._onPhoneSelected = onPhoneSelected;
-    this._onBuy = onBuy;
+
+    this._phones = [];
 
     this._render();
 
-    this._element.addEventListener('click', (event) => {
-      let phoneElement = event.target.closest('[data-element="phone"]');
+    this.on('click', 'details-link', (event) => {
+      const phoneElement = event.target.closest('[data-element="phone"]');
 
-      if (!phoneElement) {
-        return;
-      }
-      if (event.target.closest('[data-phone-thumb]') || event.target.matches('[data-phone-header]')) {
-        this._onPhoneSelected(phoneElement.dataset.phoneId);
-      } else if (event.target.closest('[data-cart-add]') ) {
-        this._onBuy(phoneElement.dataset.phoneId);
-      }
+      this.emit('phone-selected', phoneElement.dataset.phoneId);
     });
+
+    this.on('click', 'add-button', (event) => {
+      const phoneElement = event.target.closest('[data-element="phone"]');
+
+      this.emit('phone-added', phoneElement.dataset.phoneId);
+    });
+  }
+
+  show(phones) {
+    this._phones = phones;
+
+    super.show();
+
+    this._render();
   }
 
   _render() {
@@ -34,18 +34,35 @@ export default class PhoneCatalog extends Component {
       <ul class="phones">
         ${ this._phones.map(phone => `
         
-          <li class="thumbnail" data-element="phone" data-phone-id="${ phone.id }">
-            <a href="#!/phones/${ phone.id }" class="thumb" data-phone-thumb>
-              <img alt="${ phone.name }" src="${ phone.imageUrl }">
+          <li
+            data-element="phone"
+            data-phone-id="${ phone.id }"
+            class="thumbnail"
+          >
+            <a
+              data-element="details-link"
+              href="#!/phones/${ phone.id }"
+              class="thumb"
+            >
+              <img
+                alt="${ phone.name }"
+                src="${ phone.imageUrl }"
+              >
             </a>
   
-            <div data-cart-add class="phones__btn-buy-wrapper">
-              <a class="btn btn-success">
+            <div class="phones__btn-buy-wrapper">
+              <button class="btn btn-success" data-element="add-button">
                 Add
-              </a>
+              </button>
             </div>
   
-            <a data-phone-header href="#!/phones/${ phone.id }">${ phone.name }</a>
+            <a
+              data-element="details-link"
+              href="#!/phones/motorola-xoom-with-wi-fi"
+            >
+              ${ phone.name }
+            </a>
+            
             <p>${ phone.snippet }</p>
           </li>
         

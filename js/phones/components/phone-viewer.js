@@ -1,65 +1,64 @@
 import Component from '../../component.js';
 
-export default class PhoneViewer extends Component{
-  constructor({
-    element,
-    onBack = () => {},
-    onBuy = () => {}
-  }) {
+export default class PhoneViewer extends Component {
+  constructor({ element }) {
     super({ element });
-    this._onBack = onBack;
-    this._onBuy = onBuy;
 
+    this.on('click', 'back-button', () => {
+      this.emit('back');
+    });
 
-    this._element.addEventListener('click', (event) => {
-      if (event.target === this._btnBack) {
-        this._onBack();
-      } else if (event.target === this._btnAddToCart) {
-        this._onBuy(this._phoneDetails.id);
-      } else if (event.target.matches('[data-thumb]')) {
-        this._largeImg.src = event.target.closest('img').src;
-      } else {
-        return;
-      }
+    this.on('click', 'add-button', () => {
+      this.emit('add', this._phoneDetails.id);
+    });
 
+    this.on('click', 'small-image', (event) => {
+      const smallImage = event.target;
+      const largeImage = this._element.querySelector('[data-element="large-image"]');
 
+      largeImage.src = smallImage.src;
     });
   }
 
   show(phoneDetails) {
-    super.show();
     this._phoneDetails = phoneDetails;
+
+    super.show();
+
     this._render();
-    this._btnBack = this._element.querySelector('[data-element="back"]');
-    this._btnAddToCart = this._element.querySelector('[data-element="add-to-cart"]');
-    this._largeImg = this._element.querySelector('.phone');
   }
 
   _render() {
     const phone = this._phoneDetails;
 
     this._element.innerHTML = `
-      <img class="phone" src="${ phone.images[0] }">
+      <img
+        data-element="large-image"
+        class="phone"
+        src="${ phone.images[0] }"
+      >
 
-      <button data-element="back">Back</button>
-      <button data-element="add-to-cart">Add to cart</button>
+      <button data-element="back-button">
+        Back
+      </button>
+      
+      <button data-element="add-button">
+        Add to basket
+      </button>
   
   
       <h1>${ phone.name }</h1>
-  
       <p>${ phone.description }</p>
   
       <ul class="phone-thumbs">
-      ${
-  phone.images.map(img => 
-    `
+        ${ phone.images.map(imageUrl => `
           <li>
-            <img data-thumb src="${img}">
-          </li>        
-        `
-  ).join('')
-}
-
+            <img
+              data-element="small-image"
+              src="${ imageUrl }"
+            >                
+          </li>
+        `).join('') }
       </ul>
     `;
   }
