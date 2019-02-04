@@ -3,21 +3,19 @@ const PhoneService = {
 
   phonesDir: 'phones/',
 
-  async getAll({ query = '', sortBy = '' } = {}) {
+  getAll({ query = '', sortBy = '' } = {}, callback) {
     console.log(`Query: ${query}, sortBy ${sortBy} `);
 
-    const phonesFromServer = await this._fetchData(`${this.baseurl}${this.phonesDir}phones.json`);
+    this._sendRequest(`${this.baseurl}${this.phonesDir}phones.json`, (phonesFromServer) => {
+      const filteredPhones = this._filter(phonesFromServer, query);
+      const sortedPhones = this._sortBy(filteredPhones, sortBy);
 
-    const filteredPhones = this._filter(phonesFromServer, query);
-    const sortedPhones = this._sortBy(filteredPhones, sortBy);
-
-    return sortedPhones;
+      callback(sortedPhones);
+    });
   },
 
-  async getById(phoneId) {
-    // return phonesDetails.find(phone => phone.id === phoneId);
-    const phone = await this._fetchData(`${this.baseurl}${this.phonesDir}${phoneId}.json`);
-    return phone;
+  getById(phoneId, callback) {
+    this._sendRequest(`${this.baseurl}${this.phonesDir}${phoneId}.json`, callback);
   },
 
   _filter(phones, query) {
@@ -38,25 +36,23 @@ const PhoneService = {
     return phones;
   },
 
-  async _fetchData(url) {
-    // const result = {status: '', statusText: '', response: {}};
+  _sendRequest(url, callback) {
+    const xhr = new XMLHttpRequest();
 
-    // const xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
 
-    // xhr.open('GET', url);
+    xhr.onload = () => {
+      if (xhr.status !== 200) {
+        console.log(`${ xhr.status } ${ xhr.statusText }`);
+        return {};
+      }
 
-    // xhr.onload = function() {
-    //   result.status = xhr.status;
-    //   result.statusText = xhr.statusText;
-    //   result.response = JSON.parse(xhr.responseText);
-    // }
+      const data = JSON.parse(xhr.responseText);
 
-    // xhr.send();
+      callback(data);
+    };
 
-    const response = await fetch(url);
-    const result = await response.text();
-
-    return JSON.parse(result);
+    xhr.send();
   },
 };
 

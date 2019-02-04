@@ -17,22 +17,32 @@ export default class PhonesPage {
     this._initShoppingCart();
   }
 
-  async _initCatalog() {
+  _initCatalog() {
     this._catalog = new PhoneCatalog({
       element: document.querySelector('[data-component="phone-catalog"]'),
     });
 
-    await this._showPhones();
+    this._showPhones();
 
-    this._catalog.subscribe('phone-selected', async (phoneId) => {
-      const phoneDetails = await PhoneService.getById(phoneId);
-
-      this._catalog.hide();
-      this._viewer.show(phoneDetails);
+    this._catalog.subscribe('phone-selected', (phoneId) => {
+      PhoneService.getById(phoneId, (phoneDetails) => {
+        this._catalog.hide();
+        this._viewer.show(phoneDetails);
+      });
     });
 
     this._catalog.subscribe('phone-added', (phoneId) => {
       this._cart.add(phoneId);
+    });
+
+    this._catalog.subscribe('paginate', ({ phoneElements, phonesToShow }) => {
+      Array.prototype.forEach.call(phoneElements, (phoneElement) => {
+        if (Array.prototype.includes.call(phonesToShow, phoneElement)) {
+          phoneElement.style.display = 'block';
+        } else {
+          phoneElement.style.display = 'none';
+        }
+      });
     });
   }
 
@@ -71,11 +81,11 @@ export default class PhonesPage {
     });
   }
 
-  async _showPhones() {
+  _showPhones() {
     const currentFiltering = this._filter.getCurrentData();
-    const phones = await PhoneService.getAll(currentFiltering);
-
-    this._catalog.show(phones);
+    PhoneService.getAll(currentFiltering, (phones) => {
+      this._catalog.show(phones);
+    });
   }
 
   _render() {
@@ -95,7 +105,7 @@ export default class PhonesPage {
     
         <!--Main content-->
         <div class="col-md-10">
-          <div data-component="phone-catalog"></div>
+          <div data-component="phone-catalog" hidden></div>
           <div data-component="phone-viewer" hidden></div>
         </div>
       </div>
