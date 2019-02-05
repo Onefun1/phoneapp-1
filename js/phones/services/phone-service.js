@@ -4,8 +4,6 @@ const PhoneService = {
   phonesDir: 'phones/',
 
   getAll({ query = '', sortBy = '' } = {}, callback) {
-    console.log(`Query: ${query}, sortBy ${sortBy} `);
-
     this._sendRequest(`${this.baseurl}${this.phonesDir}phones.json`, (phonesFromServer) => {
       const filteredPhones = this._filter(phonesFromServer, query);
       const sortedPhones = this._sortBy(filteredPhones, sortBy);
