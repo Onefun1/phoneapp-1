@@ -1,6 +1,7 @@
 import Component from '../../component.js';
 
-const debounce = _.debounce;
+// eslint-disable-next-line no-undef
+const { debounce } = _;
 
 const QUERY_CHANGE_DELAY = 600;
 

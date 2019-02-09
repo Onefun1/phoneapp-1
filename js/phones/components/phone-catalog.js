@@ -53,22 +53,18 @@ export default class PhoneCatalog extends Component {
     });
 
     const displayPhones = ({
-      phoneElements, phonesToShow, currentPageNumber, perPage, emitter,
+      firstElementIndex, lastElementIndex, currentPageNumber, perPage, emitter,
     }) => {
-      [...phoneElements].forEach((phoneElement) => {
-        if ([...phonesToShow].includes(phoneElement)) {
+      const phoneElements = document.querySelectorAll('[data-element="phone"]');
+      [...phoneElements].forEach((phoneElement, index) => {
+        if (firstElementIndex <= index && index < lastElementIndex) {
           phoneElement.style.display = 'block';
         } else {
           phoneElement.style.display = 'none';
         }
       });
+
       // эта логика вынесена чтоб 2 пагинатора синхронизировались по кол-ву страниц и по текущей стр
-      this._paginatorTop._changePaginatorInfo();
-
-      if (emitter === 'show') {
-        return;
-      }
-
       if (emitter === 'selector') {
         this._paginatorTop._renderPageNumbers(perPage);
         this._paginatorBottom._renderPageNumbers(perPage);
@@ -76,6 +72,7 @@ export default class PhoneCatalog extends Component {
         this._perPage = perPage;
       }
 
+      this._paginatorTop._changePaginatorInfo();
       this._paginatorTop._changeCurrentPage(currentPageNumber);
       this._paginatorBottom._changeCurrentPage(currentPageNumber);
     };
@@ -85,6 +82,8 @@ export default class PhoneCatalog extends Component {
 
     this._paginatorTop.show(this._phones.length);
     this._paginatorBottom.show(this._phones.length);
+
+    this._paginatorTop.emit('paginate', this._paginatorTop._getIndexesToShow('show'));
   }
 
   _render() {

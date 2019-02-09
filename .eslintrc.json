@@ -10,7 +10,7 @@
     },
     "rules": {
         "linebreak-style":"off",
-        "no-underscore-dangle":"off",
+        "no-underscore-dangle": [2, { "allowAfterThis": true }],
         "no-plusplus":"off",
         "no-console":"off",
         "template-curly-spacing":"off",
