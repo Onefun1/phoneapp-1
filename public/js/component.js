@@ -2,7 +2,32 @@ export default class Component {
   constructor({ element }) {
     this._element = element;
     this._callbackMap = {};
+    this._props = {};
+    this._state = {};
   }
+
+  setState(newState) {
+    this._state = {
+      ...this._state,
+      ...newState,
+    };
+
+    if (this._updateView) {
+      this._updateView();
+    }
+  }
+
+  setProps(newProps) {
+    this._props = {
+      ...this._props,
+      ...newProps,
+    };
+
+    if (this._updateView) {
+      this._updateView();
+    }
+  }
+
 
   hide() {
     this._element.hidden = true;
@@ -14,7 +39,7 @@ export default class Component {
 
   on(eventName, elementName, callback) {
     this._element.addEventListener(eventName, (event) => {
-      let delegateTarget = event.target.closest(`[data-element="${ elementName }"]`);
+      const delegateTarget = event.target.closest(`[data-element="${ elementName }"]`);
 
       if (!delegateTarget || !this._element.contains(delegateTarget)) {
         return;
@@ -39,7 +64,7 @@ export default class Component {
       return;
     }
 
-    eventCallbacks.forEach(callback => {
+    eventCallbacks.forEach((callback) => {
       callback(data);
     });
   }

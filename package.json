@@ -4,7 +4,9 @@
   "description": "Mate PhoneApp",
   "main": "index.html",
   "scripts": {
-    "test": "eslint ."
+    "test": "eslint .",
+    "lint": "eslint --ext .js ./public/js",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +25,8 @@
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0"
+  },
+  "dependencies": {
+    "node-static": "^0.7.11"
   }
 }

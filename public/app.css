@@ -110,30 +110,31 @@ h1 {
   user-select: none;
 }
 
-.paginator-element {
+.paginator__page-button {
   border: 1px solid black;
   background-color: #777;
   padding: 5px;
+  margin: 0px 2px;
   cursor: pointer;
   color: #fff;
 }
 
-.paginator-element:hover {
+.paginator__page-button:hover {
   background-color: #aaa;
 }
 
-.paginator-current {
+.paginator__page-button--current {
   background-color: #ccc; 
   color: #333;
 }
 
-.paginator, .paginator-selector, .paginator-info {
+.paginator, .paginator__page-info {
   position: relative;
   top: -8px;
   padding: 3px;
   margin-left: 40px;
 }
 
-.paginator-info {
+.pagination__page-info {
   font-weight: bold;
 }

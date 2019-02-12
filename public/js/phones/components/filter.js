@@ -1,6 +1,6 @@
+/* global _:true */
 import Component from '../../component.js';
 
-// eslint-disable-next-line no-undef
 const { debounce } = _;
 
 const QUERY_CHANGE_DELAY = 600;
