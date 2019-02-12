@@ -5,6 +5,7 @@ export default class Paginator extends Component {
     super({ element });
 
     this._props = { ...props };
+    // this._state = { currentPage: 1 };
 
     this._render();
 
@@ -32,11 +33,11 @@ export default class Paginator extends Component {
     });
 
     this.on('click', 'prev-button', () => {
-      this._setPage(this._state.currentPage - 1);
+      this._setPage(this._props.currentPage - 1);
     });
 
     this.on('click', 'next-button', () => {
-      this._setPage(this._state.currentPage + 1);
+      this._setPage(this._props.currentPage + 1);
     });
 
     this.on('change', 'per-page-select', ({ target }) => {
@@ -59,7 +60,11 @@ export default class Paginator extends Component {
   }
 
   _render() {
-    const { currentPage, perPage, selector } = this._props;
+    const {
+      currentPage, perPage, selector, info,
+    } = this._props;
+    const startIndex = (currentPage - 1) * perPage;
+    const endIndex = startIndex + perPage;
 
     this._element.innerHTML = `
     ${selector
@@ -88,6 +93,7 @@ export default class Paginator extends Component {
       `).join('')}
       
       <span data-element="next-button" class="paginator__page-button">-></span>
+      ${info ? `<span data-element="page-info" class="paginator__page-info">Show ${startIndex + 1} to ${endIndex > info.totalItems ? info.totalItems : endIndex} phones from  ${info.totalItems}</span>` : ''}
     `;
   }
 }

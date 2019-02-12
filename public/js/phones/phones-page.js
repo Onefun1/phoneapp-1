@@ -79,23 +79,15 @@ export default class PhonesPage extends Component {
     });
 
     this._paginatorTop.subscribe('page-changed', (currentPageIndex) => {
-      this._paginatorTop.setState({ currentPage: currentPageIndex });
       this.setState({ currentPage: currentPageIndex });
     });
 
     this._paginatorTop.subscribe('per-page-changed', (perPageCount) => {
-      this._paginatorTop.setState({ perPage: perPageCount });
-      this.setState({ perPage: perPageCount });
+      this.setState({ perPage: perPageCount, currentPage: 1 });
     });
 
     this._paginatorBottom.subscribe('page-changed', (currentPageIndex) => {
-      this._paginatorTop.setState({ currentPage: currentPageIndex });
       this.setState({ currentPage: currentPageIndex });
-    });
-
-    this._paginatorBottom.subscribe('per-page-changed', (perPageCount) => {
-      this._paginatorTop.setState({ perPage: perPageCount });
-      this.setState({ perPage: perPageCount });
     });
   }
 
@@ -105,8 +97,12 @@ export default class PhonesPage extends Component {
     });
 
     this._catalog.subscribe('phone-selected', (phoneId) => {
-      PhoneService.getById(phoneId, (phoneDetails) => {
+      const detailsPromise = PhoneService.getById(phoneId);
+
+      detailsPromise.then((phoneDetails) => {
         this._catalog.hide();
+        this._paginatorTop.hide();
+        this._paginatorBottom.hide();
         this._viewer.show(phoneDetails);
       });
     });
@@ -124,6 +120,8 @@ export default class PhonesPage extends Component {
     this._viewer.subscribe('back', () => {
       this._viewer.hide();
       this._catalog.show();
+      this._paginatorTop.show();
+      this._paginatorBottom.show();
     });
 
     this._viewer.subscribe('add', (phoneId) => {
@@ -153,16 +151,16 @@ export default class PhonesPage extends Component {
 
   _updateView() {
     const { phones, currentPage, perPage } = this._state;
-    const paginationProps = {
-      pagesCount: this.pagesCount,
-      currentPage,
-      perPage,
-    };
-
     const startIndex = (currentPage - 1) * perPage;
     const endIndex = startIndex + perPage;
     const visiblePhones = phones.slice(startIndex, endIndex);
 
+    const paginationProps = {
+      pagesCount: this.pagesCount,
+      currentPage,
+      perPage,
+      info: { totalItems: phones.length },
+    };
     this._paginatorTop.setProps(paginationProps);
     this._paginatorBottom.setProps(paginationProps);
     this._catalog.show(visiblePhones);
