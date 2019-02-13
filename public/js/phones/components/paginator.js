@@ -61,7 +61,7 @@ export default class Paginator extends Component {
 
   _render() {
     const {
-      currentPage, perPage, selector, info,
+      currentPage, perPage, selector, info, totalItems,
     } = this._props;
     const startIndex = (currentPage - 1) * perPage;
     const endIndex = startIndex + perPage;
@@ -93,7 +93,12 @@ export default class Paginator extends Component {
       `).join('')}
       
       <span data-element="next-button" class="paginator__page-button">-></span>
-      ${info ? `<span data-element="page-info" class="paginator__page-info">Show ${startIndex + 1} to ${endIndex > info.totalItems ? info.totalItems : endIndex} phones from  ${info.totalItems}</span>` : ''}
+  ${
+  info
+    ? `<span data-element="page-info" class="paginator__page-info">
+         Show ${startIndex + 1} to ${endIndex > totalItems ? totalItems : endIndex} phones from  ${totalItems}
+       </span>`
+    : ''}
     `;
   }
 }

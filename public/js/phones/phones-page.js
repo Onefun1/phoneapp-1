@@ -159,7 +159,7 @@ export default class PhonesPage extends Component {
       pagesCount: this.pagesCount,
       currentPage,
       perPage,
-      info: { totalItems: phones.length },
+      totalItems: phones.length,
     };
     this._paginatorTop.setProps(paginationProps);
     this._paginatorBottom.setProps(paginationProps);
