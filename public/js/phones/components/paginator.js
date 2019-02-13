@@ -96,7 +96,7 @@ export default class Paginator extends Component {
   ${
   info
     ? `<span data-element="page-info" class="paginator__page-info">
-         Show ${startIndex + 1} to ${endIndex > totalItems ? totalItems : endIndex} phones from  ${totalItems}
+         Show ${startIndex + 1} to ${Math.min(endIndex, totalItems)} phones from  ${totalItems}
        </span>`
     : ''}
     `;
