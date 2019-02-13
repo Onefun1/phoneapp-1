@@ -16,7 +16,8 @@ export default class ShoppingCart extends Component {
   }
 
   add(itemId) {
-    if (!Object.prototype.hasOwnProperty.call(this._itemsMap, itemId)) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (!this._itemsMap.hasOwnProperty(itemId)) {
       this._itemsMap[itemId] = 0;
     }
 
@@ -26,7 +27,8 @@ export default class ShoppingCart extends Component {
   }
 
   remove(itemId) {
-    if (!Object.prototype.hasOwnProperty.call(this._itemsMap, itemId)) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (!this._itemsMap.hasOwnProperty(itemId)) {
       return;
     }
 
