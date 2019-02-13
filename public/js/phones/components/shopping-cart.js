@@ -9,14 +9,14 @@ export default class ShoppingCart extends Component {
     this._render();
 
     this.on('click', 'remove', (event) => {
-      let itemElement = event.target.closest('[data-element="item"]');
+      const itemElement = event.target.closest('[data-element="item"]');
 
       this.remove(itemElement.dataset.itemId);
     });
   }
 
   add(itemId) {
-    if (!this._itemsMap.hasOwnProperty(itemId)) {
+    if (!Object.prototype.hasOwnProperty.call(this._itemsMap, itemId)) {
       this._itemsMap[itemId] = 0;
     }
 
@@ -26,7 +26,7 @@ export default class ShoppingCart extends Component {
   }
 
   remove(itemId) {
-    if (!this._itemsMap.hasOwnProperty(itemId)) {
+    if (!Object.prototype.hasOwnProperty.call(this._itemsMap, itemId)) {
       return;
     }
 
@@ -40,7 +40,7 @@ export default class ShoppingCart extends Component {
   }
 
   _render() {
-    let itemIds = Object.keys(this._itemsMap);
+    const itemIds = Object.keys(this._itemsMap);
 
     this._element.innerHTML = `
         <h4>Shopping Cart</h4>
